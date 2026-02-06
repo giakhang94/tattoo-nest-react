@@ -1,0 +1,14 @@
+### create user
+post http://localhost:3000/user
+Content-Type: application/json
+
+{
+    "name":"khang",
+    "email":"ngk.khang94@gmail.com",
+    "password": "Ngk@2901"
+}
+
+###get all user
+Get http://localhost:3000/user
+
+
