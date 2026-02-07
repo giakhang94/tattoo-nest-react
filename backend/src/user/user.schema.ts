@@ -3,6 +3,7 @@ import { NextFunction } from 'express';
 import { HydratedDocument } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
+import { BadRequestException } from '@nestjs/common';
 export enum Role {
   admin,
   user,
@@ -38,3 +39,11 @@ UserSchema.pre('save', async function () {
     throw error;
   }
 });
+
+//compare password
+UserSchema.methods.comparePassword = async function (inputPassword: string) {
+  const isMatched = await bcrypt.compare(inputPassword, this.password);
+  if (!isMatched)
+    throw new BadRequestException('email or password is not correct');
+  return isMatched;
+};
