@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { attachCookie } from './utils/attachCookie';
 @Injectable()
 export class AuthService {
   constructor(
@@ -31,11 +32,25 @@ export class AuthService {
     const { id, role } = user;
     const payload = { id, role };
     const token = this.jwt.sign(payload);
-    response.cookie('authentication_token', token, {
-      httpOnly: true,
-      secure: true,
-      expires: new Date(Date.now() + this.config.getOrThrow('JWT_EXP') * 1000),
+    attachCookie(
+      response,
+      'authentication_token',
+      token,
+      this.config.getOrThrow('JWT_EXP'),
+    );
+    //refresh token
+    const refreshToken = this.jwt.sign(payload, {
+      expiresIn:
+        this.config.getOrThrow('JWT_REFRESH_EXP') +
+        this.config.getOrThrow('JWT_REFRESH_UNIT'),
+      secret: this.config.getOrThrow('JWT_REFRESH_SECRET'),
     });
+    attachCookie(
+      response,
+      'refresh_token',
+      refreshToken,
+      this.config.getOrThrow('JWT_REFRESH_EXP'),
+    );
     return { message: 'login successfully' };
   }
 }
