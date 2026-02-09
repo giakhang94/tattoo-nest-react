@@ -71,4 +71,11 @@ export class AuthService {
     );
     return { message: 'token refreshed' };
   }
+
+  async logout(response: Response) {
+    attachCookie(response, 'authentication_token', '', 0);
+    attachCookie(response, 'refresh_token', '', 0);
+
+    return { message: 'logout successfully' };
+  }
 }

@@ -44,4 +44,10 @@ export class AuthController {
   ) {
     return this.authService.refreshToken(response, user);
   }
+
+  @Get('logout')
+  @UseGuards(RefreshJwtGuard)
+  logout(@Res({ passthrough: true }) response: Response) {
+    return this.authService.logout(response);
+  }
 }
