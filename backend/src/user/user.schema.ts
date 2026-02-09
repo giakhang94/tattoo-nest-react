@@ -23,7 +23,7 @@ export class User {
   @Exclude()
   password: string;
 
-  @Prop({ require: true })
+  @Prop({ require: true, default: Role.user })
   role: Role;
 }
 

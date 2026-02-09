@@ -30,8 +30,8 @@ export class AuthService {
 
   async login(user: UserDocument, response: Response) {
     const { id, role } = user;
-    const payload = { id, role };
-    const token = this.jwt.sign(payload);
+    const accessPayload = { id, role, type: 'access_token' };
+    const token = this.jwt.sign(accessPayload);
     attachCookie(
       response,
       'authentication_token',
@@ -39,7 +39,8 @@ export class AuthService {
       this.config.getOrThrow('JWT_EXP'),
     );
     //refresh token
-    const refreshToken = this.jwt.sign(payload, {
+    const refreshPayload = { id, role, type: 'refresh_token' };
+    const refreshToken = this.jwt.sign(refreshPayload, {
       expiresIn:
         this.config.getOrThrow('JWT_REFRESH_EXP') +
         this.config.getOrThrow('JWT_REFRESH_UNIT'),
@@ -52,5 +53,22 @@ export class AuthService {
       this.config.getOrThrow('JWT_REFRESH_EXP'),
     );
     return { message: 'login successfully' };
+  }
+
+  async refreshToken(response: Response, user: UserDocument) {
+    const { id, role } = user;
+    const authentication_token = this.jwt.sign({
+      id,
+      role,
+      type: 'access_token',
+    });
+
+    attachCookie(
+      response,
+      'authentication_token',
+      authentication_token,
+      this.config.getOrThrow('JWT_EXP'),
+    );
+    return { message: 'token refreshed' };
   }
 }

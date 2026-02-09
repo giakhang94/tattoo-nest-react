@@ -17,5 +17,8 @@ Content-Type: application/json
 
 {
     "email":"ngk.khang94@gmail.com",
-    "password": "khang29012"
+    "password": "khang2901"
 }
+
+###get current user
+Get http://localhost:3000/auth/me
