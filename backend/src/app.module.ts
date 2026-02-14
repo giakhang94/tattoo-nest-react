@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { AudioModule } from './audio/audio.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     UserModule,
     AuthModule,
     CloudinaryModule,
+    AudioModule,
   ],
   controllers: [AppController],
   providers: [AppService],

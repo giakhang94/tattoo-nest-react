@@ -11,6 +11,7 @@ import { RefreshJwtStrategy } from './strategy/refresh-jwt.strategy';
 
 @Module({
   providers: [AuthService, LocalStrategy, JwtStrategy, RefreshJwtStrategy],
+  exports: [AuthService],
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.registerAsync({
