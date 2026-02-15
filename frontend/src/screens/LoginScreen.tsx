@@ -3,6 +3,8 @@ import { Alert, Pressable, Text, View } from "react-native";
 import CustomInput from "../components/CustomInput";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { loginApi } from "../services/auth.api";
+import { parseCookies } from "../utils/parseCookies";
+import { getToken, saveToken } from "../store/storage";
 
 interface Input {
   email: string;
@@ -20,7 +22,14 @@ export default function LoginScreen() {
     try {
       setIsLoading(true);
       const response = await loginApi(input.email, input.password);
-      alert("login done");
+      const tokens = parseCookies(response.headers["set-cookie"] as any);
+      Object.keys(tokens).map(async (token) => {
+        await saveToken(token.trim(), tokens[token]);
+      });
+      //   const access = await getToken("authentication_token");
+      //   const refresh = await getToken("refresh_token");
+      //   console.log("access", access);
+      //   console.log("refresh", refresh);
     } catch (error: any) {
       alert(error);
       Alert.alert("Login failed", error?.response?.data?.message || error);

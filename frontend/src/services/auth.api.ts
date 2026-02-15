@@ -5,5 +5,5 @@ export async function loginApi(email: string, password: string) {
     email,
     password,
   });
-  return response.data;
+  return response;
 }
