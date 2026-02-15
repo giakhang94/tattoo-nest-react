@@ -5,13 +5,18 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { loginApi } from "../services/auth.api";
 import { parseCookies } from "../utils/parseCookies";
 import { getToken, saveToken } from "../store/storage";
+import { useAuthStore } from "../store/useAuthStore";
+import { RootStackParamList } from "../navigation/RootNavigation";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 interface Input {
   email: string;
   password: string;
 }
+type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }: Props) {
+  const setToken = useAuthStore((state) => state.setToken);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [input, setInput] = useState<Input>({ email: "", password: "" });
@@ -25,6 +30,9 @@ export default function LoginScreen() {
       const tokens = parseCookies(response.headers["set-cookie"] as any);
       Object.keys(tokens).map(async (token) => {
         await saveToken(token.trim(), tokens[token]);
+        if (token.trim() === "authentication_token") {
+          setToken(tokens[token]);
+        }
       });
       //   const access = await getToken("authentication_token");
       //   const refresh = await getToken("refresh_token");
