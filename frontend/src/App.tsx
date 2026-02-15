@@ -1,5 +1,6 @@
-import RootNavigator from "./navigation/RootNavigator";
+import RootNavigation from "./navigation/RootNavigation";
+import "../global.css";
 
 export default function App() {
-  return <RootNavigator />;
+  return <RootNavigation />;
 }
