@@ -1,13 +1,8 @@
 import { useState } from "react";
-import {
-  Pressable,
-  Text,
-  TextInput,
-  TextInputChangeEvent,
-  View,
-} from "react-native";
+import { Alert, Pressable, Text, View } from "react-native";
 import CustomInput from "../components/CustomInput";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { loginApi } from "../services/auth.api";
 
 interface Input {
   email: string;
@@ -16,11 +11,23 @@ interface Input {
 
 export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [input, setInput] = useState<Input>({ email: "", password: "" });
   const handleChangeInput = (name: string, text: string) => {
     setInput((prev) => ({ ...prev, [name]: text }));
   };
-
+  const handleLogin = async () => {
+    try {
+      setIsLoading(true);
+      const response = await loginApi(input.email, input.password);
+      alert("login done");
+    } catch (error: any) {
+      alert(error);
+      Alert.alert("Login failed", error?.response?.data?.message || error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <View className="justify-center mx-auto mt-[50%]  space-y-5">
       <Text className="text-center text-[20px] font-bold tracking-[2px]">
@@ -58,12 +65,12 @@ export default function LoginScreen() {
           />
         </View>
         <Pressable
-          className="mt-2 py-2 px-2 rounded-md  bg-black text-white font-semibold tracking-[2px]"
-          onPress={() => {
-            alert(input.email + " " + input.password);
-          }}
+          className={`mt-2 py-2 px-2 rounded-md bg-black text-white font-semibold tracking-[2px] ${isLoading ? "opacity-80" : ""}`}
+          onPress={handleLogin}
         >
-          <Text className="text-white text-center">Login</Text>
+          <Text className="text-white text-center">
+            {isLoading ? "loading.." : "Login"}
+          </Text>
         </Pressable>
       </View>
     </View>
