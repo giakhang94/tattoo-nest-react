@@ -34,6 +34,10 @@ export default function LoginScreen({ navigation }: Props) {
           setToken(tokens[token]);
         }
       });
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Home" }],
+      });
       //   const access = await getToken("authentication_token");
       //   const refresh = await getToken("refresh_token");
       //   console.log("access", access);

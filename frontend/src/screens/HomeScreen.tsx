@@ -1,15 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation/RootNavigation";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useEffect } from "react";
-import { getMeApi } from "../services/user.api";
-import { getToken } from "../store/storage";
+import { Pressable, Text, View } from "react-native";
 import { useAuthStore } from "../store/useAuthStore";
+import LogoutButton from "../components/LogoutButton";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 export default function HomeScreen({ navigation }: Props) {
   const userToken = useAuthStore((state) => state.userToken);
-  console.log(userToken);
   return (
     <View className="h-full flex-1 justify-center items-center">
       <Text className="font-bold text-[28px] mb-8">Tattoo Audio App</Text>
@@ -29,7 +26,7 @@ export default function HomeScreen({ navigation }: Props) {
       >
         <Text className="text-white text-[16px]">Scan</Text>
       </Pressable>
-      {!userToken && (
+      {!userToken ? (
         <Pressable
           className="bg-transparent border-[1px] px-3 py-3 rounded-sm min-w-[160px] flex justify-center items-center mt-3"
           onPress={() => {
@@ -38,6 +35,8 @@ export default function HomeScreen({ navigation }: Props) {
         >
           <Text className="text-black text-[16px]">Login</Text>
         </Pressable>
+      ) : (
+        <LogoutButton />
       )}
     </View>
   );

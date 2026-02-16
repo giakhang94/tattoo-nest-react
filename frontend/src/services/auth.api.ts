@@ -7,3 +7,8 @@ export async function loginApi(email: string, password: string) {
   });
   return response;
 }
+
+export async function logoutApi() {
+  const response = await api.get("/auth/logout");
+  console.log(response.data);
+}

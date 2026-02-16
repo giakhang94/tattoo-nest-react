@@ -15,7 +15,7 @@ api.interceptors.request.use(async (config) => {
     cookie = cookie + `authentication_token=${accessToken}`;
   }
   if (refreshToken) {
-    cookie = cookie + `refresh_token=${refreshToken}`;
+    cookie = cookie + ";" + " " + `refresh_token=${refreshToken}`;
   }
   config.headers.Cookie = cookie;
   return config;
