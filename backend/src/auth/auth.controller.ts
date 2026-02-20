@@ -26,6 +26,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
     @GetCurrentUser() user: UserDocument,
   ) {
+    console.log('login');
     return this.authService.login(user, response);
   }
 
@@ -48,6 +49,7 @@ export class AuthController {
   @Get('logout')
   @UseGuards(RefreshJwtGuard)
   logout(@Res({ passthrough: true }) response: Response) {
+    // console.log('logging out');
     return this.authService.logout(response);
   }
 }
